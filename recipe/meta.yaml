@@ -31,17 +31,27 @@ requirements:
 
 test:
   imports:
+    - apps
     - skrf
     - skrf.calibration
     - skrf.data
     - skrf.io
     - skrf.media
+    - skrf.notebook
+    - skrf.vi
+    - skrf.vi.scpi
 
 about:
   home: http://www.scikit-rf.org
   license: BSD 3-Clause
   summary: 'Object Oriented Microwave Engineering.'
   doc_url: http://scikit-rf.readthedocs.io/
+  description: |
+    scikit-rf is an Open Source, BSD-licensed package for RF/Microwave
+    engineering implemented in the Python programming language. It provides
+    a modern, object-oriented library which is both flexible and scalable.
+  doc_url: http://scikit-rf.readthedocs.org/en/latest/
+  doc_source_url: https://github.com/scikit-rf/scikit-rf/blob/master/doc/source/index.rst
   dev_url: https://github.com/scikit-rf/scikit-rf
 
 extra:
