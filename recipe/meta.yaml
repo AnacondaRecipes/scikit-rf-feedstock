@@ -1,4 +1,5 @@
-{% set version = "0.16.0" %}
+{% set version = "0.17.0" %}
+{% set sha256 = "fe34e12f632935fc182e344aa25ae9a24897cd5674563e8c290e27b08040fad9" %}
 
 package:
   name: scikit-rf
@@ -6,26 +7,37 @@ package:
 
 
 source:
-  fn: scikit-rf-{{ version }}.zip
-  url: https://github.com/scikit-rf/scikit-rf/archive/{{ version }}.tar.gz
-  sha256: 190554acb81ff9ee133dcf25623110b6e6d5b410670be2b4af22172d177019c4
+  fn: scikit-rf-{{ version }}.tar.gz
+  # For some reason, 0.17.0 dropped the `.0` patch component from its GitHub
+  # archive names, so we need to munge the version string to avoid getting a
+  # 404 when downloading the sources.  Note that conda-forge set its conda
+  # package version to "0.17", but we are not doing that for defaults because
+  # we want our conda package's version string to match the version string the
+  # upstream authors published to PyPI.
+  url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version.split(".")[:2] | join(".") }}.tar.gz
+  sha256: {{ sha256 }}
 
 
 build:
+  # Upstream has seemingly not put any effort into fixing the broken C
+  # components in `skrf.src`, so we may as well turn treat this as a pure
+  # Python package like conda-forge has done since v0.14.9.
+  noarch: python
   number: 0
-  script: python setup.py install --single-version-externally-managed --record record.txt
+  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
 
 requirements:
   host:
     - python
-    - setuptools
+    - pip
   run:
     - python
-    - pandas
-    - ipython
+    - pandas        # not listed in setup.py, but needed from CSV I/O
+    #- ipython       # not listed in setup.py and not imported anywhere
     - numpy
     - scipy
-    - matplotlib
+    - matplotlib    # not listed in setup.py, but needed for plotting
+    - networkx      # not listed in setup.py, but needed for plotting
     - six
     - future
 
@@ -38,8 +50,11 @@ test:
     - skrf.io
     - skrf.media
     - skrf.notebook
+    - skrf.plotting
+    #- skrf.src      # broken; see `test_connect_fast` in upstream sources
     - skrf.vi
     - skrf.vi.scpi
+    #- skrf.vi.vna   # optional instrument control; requires `pyvisa`
 
 about:
   home: http://www.scikit-rf.org
