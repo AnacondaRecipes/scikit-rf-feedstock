@@ -28,11 +28,12 @@ requirements:
     - pip
   run:
     - python
-    - pandas
-    - ipython
+    - pandas        # not listed in setup.py, but needed from CSV I/O
+    #- ipython       # not listed in setup.py and not imported anywhere
     - numpy
     - scipy
-    - matplotlib
+    - matplotlib    # not listed in setup.py, but needed for plotting
+    - networkx      # not listed in setup.py, but needed for plotting
     - six
     - future
 
@@ -45,8 +46,11 @@ test:
     - skrf.io
     - skrf.media
     - skrf.notebook
+    - skrf.plotting
+    #- skrf.src      # broken; see `test_connect_fast` in upstream sources
     - skrf.vi
     - skrf.vi.scpi
+    #- skrf.vi.vna   # optional instrument control; requires `pyvisa`
 
 about:
   home: http://www.scikit-rf.org
