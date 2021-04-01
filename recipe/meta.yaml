@@ -1,4 +1,5 @@
 {% set version = "0.17.0" %}
+{% set sha256 = "fe34e12f632935fc182e344aa25ae9a24897cd5674563e8c290e27b08040fad9" %}
 
 package:
   name: scikit-rf
@@ -6,19 +7,25 @@ package:
 
 
 source:
-  fn: scikit-rf-{{ version }}.zip
-  url: https://github.com/scikit-rf/scikit-rf/archive/{{ version }}.tar.gz
-  sha256: d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed
+  fn: scikit-rf-{{ version }}.tar.gz
+  # For some reason, 0.17.0 dropped the `.0` patch component from its GitHub
+  # archive names, so we need to munge the version string to avoid getting a
+  # 404 when downloading the sources.  Note that conda-forge set its conda
+  # package version to "0.17", but we are not doing that for defaults because
+  # we want our conda package's version string to match the version string the
+  # upstream authors published to PyPI.
+  url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version.split(".")[:2] | join(".") }}.tar.gz
+  sha256: {{ sha256 }}
 
 
 build:
   number: 0
-  script: python setup.py install --single-version-externally-managed --record record.txt
+  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
 
 requirements:
   host:
     - python
-    - setuptools
+    - pip
   run:
     - python
     - pandas
