@@ -30,6 +30,8 @@ requirements:
   host:
     - python
     - pip
+    - wheel
+    - setuptools
   run:
     - python
     - pandas        # not listed in setup.py, but needed from CSV I/O
@@ -55,10 +57,16 @@ test:
     - skrf.vi
     - skrf.vi.scpi
     #- skrf.vi.vna   # optional instrument control; requires `pyvisa`
+  requires:
+    - pip
+  commands:
+    - pip check
 
 about:
   home: http://www.scikit-rf.org
-  license: BSD 3-Clause
+  license: BSD-3-Clause
+  license_file: LICENSE
+  license_family: BSD
   summary: 'Object Oriented Microwave Engineering.'
   doc_url: http://scikit-rf.readthedocs.io/
   description: |
