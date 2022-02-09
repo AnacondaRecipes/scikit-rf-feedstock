@@ -1,5 +1,5 @@
-{% set version = "0.18.1" %}
-{% set sha256 = "9bbb2bd72bf4df6c367cf351714b500ab9667a3be6d66240479a22a7dacb1c98" %}
+{% set version = "0.21.0" %}
+{% set sha256 = "d5558cd419c8d46bdc958064cb97f963d1ea793866414c025906ec15033512ed" %}
 
 package:
   name: scikit-rf
