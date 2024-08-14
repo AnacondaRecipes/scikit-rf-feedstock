@@ -22,9 +22,9 @@ build:
   # Upstream has seemingly not put any effort into fixing the broken C
   # components in `skrf.src`, so we may as well turn treat this as a pure
   # Python package like conda-forge has done since v0.14.9.
-  noarch: python
+  skip: True  # [py<38]
   number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+  script: "{{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv"
 
 requirements:
   host:
