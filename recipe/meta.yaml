@@ -1,5 +1,5 @@
-{% set version = "0.18.1" %}
-{% set sha256 = "9bbb2bd72bf4df6c367cf351714b500ab9667a3be6d66240479a22a7dacb1c98" %}
+{% set version = "1.2.0" %}
+{% set sha256 = "870ac9f461ebcc9514d861385787ac4be84636ab2b1eba3b91e096ad4d9c59c2" %}
 
 package:
   name: scikit-rf
@@ -14,7 +14,7 @@ source:
   # package version to "0.17", but we are not doing that for defaults because
   # we want our conda package's version string to match the version string the
   # upstream authors published to PyPI.
-  url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version.split(".")[:2] | join(".") }}.tar.gz
+  url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 
