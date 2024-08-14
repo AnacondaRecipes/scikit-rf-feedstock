@@ -34,47 +34,33 @@ requirements:
     - setuptools
   run:
     - python
-    - pandas        # not listed in setup.py, but needed from CSV I/O
-    #- ipython       # not listed in setup.py and not imported anywhere
-    - numpy
-    - scipy
-    - matplotlib    # not listed in setup.py, but needed for plotting
-    - networkx      # not listed in setup.py, but needed for plotting
-    - six
-    - future
+    - pandas >=1.1
+    - numpy >=1.2.1
+    - scipy >=1.7
 
 test:
   imports:
-    - apps
     - skrf
     - skrf.calibration
     - skrf.data
     - skrf.io
     - skrf.media
-    - skrf.notebook
-    - skrf.plotting
-    #- skrf.src      # broken; see `test_connect_fast` in upstream sources
-    - skrf.vi
-    - skrf.vi.scpi
-    #- skrf.vi.vna   # optional instrument control; requires `pyvisa`
   requires:
     - pip
   commands:
     - pip check
 
 about:
-  home: http://www.scikit-rf.org
+  home: https://scikit-rf.org/
   license: BSD-3-Clause
   license_file: LICENSE.txt
   license_family: BSD
   summary: 'Object Oriented Microwave Engineering.'
-  doc_url: http://scikit-rf.readthedocs.io/
+  doc_url: https://scikit-rf.readthedocs.io/
   description: |
     scikit-rf is an Open Source, BSD-licensed package for RF/Microwave
     engineering implemented in the Python programming language. It provides
     a modern, object-oriented library which is both flexible and scalable.
-  doc_url: http://scikit-rf.readthedocs.org/en/latest/
-  doc_source_url: https://github.com/scikit-rf/scikit-rf/blob/master/doc/source/index.rst
   dev_url: https://github.com/scikit-rf/scikit-rf
 
 extra:
