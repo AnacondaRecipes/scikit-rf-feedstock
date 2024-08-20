@@ -1,5 +1,5 @@
-{% set version = "0.18.1" %}
-{% set sha256 = "9bbb2bd72bf4df6c367cf351714b500ab9667a3be6d66240479a22a7dacb1c98" %}
+{% set version = "1.2.0" %}
+{% set sha256 = "870ac9f461ebcc9514d861385787ac4be84636ab2b1eba3b91e096ad4d9c59c2" %}
 
 package:
   name: scikit-rf
@@ -14,7 +14,7 @@ source:
   # package version to "0.17", but we are not doing that for defaults because
   # we want our conda package's version string to match the version string the
   # upstream authors published to PyPI.
-  url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version.split(".")[:2] | join(".") }}.tar.gz
+  url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 
@@ -22,9 +22,9 @@ build:
   # Upstream has seemingly not put any effort into fixing the broken C
   # components in `skrf.src`, so we may as well turn treat this as a pure
   # Python package like conda-forge has done since v0.14.9.
-  noarch: python
+  skip: True  # [py<38]
   number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps -vv"
+  script: "{{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv"
 
 requirements:
   host:
@@ -34,47 +34,33 @@ requirements:
     - setuptools
   run:
     - python
-    - pandas        # not listed in setup.py, but needed from CSV I/O
-    #- ipython       # not listed in setup.py and not imported anywhere
-    - numpy
-    - scipy
-    - matplotlib    # not listed in setup.py, but needed for plotting
-    - networkx      # not listed in setup.py, but needed for plotting
-    - six
-    - future
+    - pandas >=1.1
+    - numpy >=1.2.1
+    - scipy >=1.7
 
 test:
   imports:
-    - apps
     - skrf
     - skrf.calibration
     - skrf.data
     - skrf.io
     - skrf.media
-    - skrf.notebook
-    - skrf.plotting
-    #- skrf.src      # broken; see `test_connect_fast` in upstream sources
-    - skrf.vi
-    - skrf.vi.scpi
-    #- skrf.vi.vna   # optional instrument control; requires `pyvisa`
   requires:
     - pip
   commands:
     - pip check
 
 about:
-  home: http://www.scikit-rf.org
+  home: https://scikit-rf.org/
   license: BSD-3-Clause
   license_file: LICENSE.txt
   license_family: BSD
   summary: 'Object Oriented Microwave Engineering.'
-  doc_url: http://scikit-rf.readthedocs.io/
+  doc_url: https://scikit-rf.readthedocs.io/
   description: |
     scikit-rf is an Open Source, BSD-licensed package for RF/Microwave
     engineering implemented in the Python programming language. It provides
     a modern, object-oriented library which is both flexible and scalable.
-  doc_url: http://scikit-rf.readthedocs.org/en/latest/
-  doc_source_url: https://github.com/scikit-rf/scikit-rf/blob/master/doc/source/index.rst
   dev_url: https://github.com/scikit-rf/scikit-rf
 
 extra:
