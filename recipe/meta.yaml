@@ -1,10 +1,9 @@
-{% set version = "1.2.0" %}
-{% set sha256 = "870ac9f461ebcc9514d861385787ac4be84636ab2b1eba3b91e096ad4d9c59c2" %}
+{% set version = "1.8.0" %}
+{% set sha256 = "c00ba602bf45ff3b368ccbb1ca93cbf0e18d0d5dfcff2591e0efacdff6d65a43" %}
 
 package:
   name: scikit-rf
   version: {{ version }}
-
 
 source:
   fn: scikit-rf-{{ version }}.tar.gz
@@ -17,26 +16,32 @@ source:
   url: https://github.com/scikit-rf/scikit-rf/archive/v{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
-
 build:
   # Upstream has seemingly not put any effort into fixing the broken C
   # components in `skrf.src`, so we may as well turn treat this as a pure
   # Python package like conda-forge has done since v0.14.9.
-  skip: True  # [py<38]
+  skip: true  # [py<38]
   number: 0
-  script: "{{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv"
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
     - python
     - pip
     - wheel
-    - setuptools
+    - setuptools >=64
   run:
     - python
     - pandas >=1.1
-    - numpy >=1.2.1
+    - numpy >=1.21
     - scipy >=1.7
+    - typing_extensions
+  run_constrained:
+    - networkx >=2.0
+    - matplotlib-base >=3.5
+    - PyVISA >=1.12
+    - pyvisa-py >=0.6
+    - openpyxl >=3.0
 
 test:
   imports:
@@ -55,7 +60,7 @@ about:
   license: BSD-3-Clause
   license_file: LICENSE.txt
   license_family: BSD
-  summary: 'Object Oriented Microwave Engineering.'
+  summary: Object Oriented Microwave Engineering.
   doc_url: https://scikit-rf.readthedocs.io/
   description: |
     scikit-rf is an Open Source, BSD-licensed package for RF/Microwave
