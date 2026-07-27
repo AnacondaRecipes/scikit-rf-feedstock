@@ -1,5 +1,5 @@
 {% set name = "scikit-rf" %}
-{% set version = "1.8.0" %}
+{% set version = "2.0.1" %}
 
 package:
   name: {{ name }}
@@ -7,12 +7,12 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: c00ba602bf45ff3b368ccbb1ca93cbf0e18d0d5dfcff2591e0efacdff6d65a43
+  sha256: 36d5dca78a0f6d01074583536dd225b0c7eee5badc68db7e3168ddcae6d441a7
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
-  skip: true  # [py<38]
+  skip: true  # [py<310]
 
 requirements:
   host:
@@ -31,18 +31,23 @@ requirements:
     - pyspice >=1.5
     # plot
     - matplotlib-base >=3.5
-    # xlsx 
+    # xlsx
     - openpyxl >=3.0
-    # netw 
+    # netw
     - networkx >=2.0
     # visa
     - pyvisa >=1.12
     - pyvisa-py >=0.6
 
-# >   with pytest.raises(RuntimeWarning):
-# E   Failed: DID NOT RAISE <class 'RuntimeWarning'>
-# The test uses pytest.raises(RuntimeWarning) but warnings aren't exceptions—they need pytest.warns() instead.
-{% set deselect_tests = " --deselect=skrf/tests/test_network.py::NetworkTestCase" %}
+# These tests expect RuntimeWarning to be raised for zero-division cases,
+# but the current Numpy behavior emits warnings without raising exceptions.
+{% set deselect_tests = "--deselect=skrf/tests/test_network.py::NetworkTestCase::test_gain_circle" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain" %}
+# Windows does not allow reopening a NamedTemporaryFile for writing
+# while it is still open, which causes PermissionError in this test.
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif" %} # [win]
 test:
   source_files:
     - skrf/tests
@@ -59,7 +64,7 @@ test:
     - pytest -v skrf {{ deselect_tests }}
   requires:
     - pip
-    - pytest >=7.0
+    - pytest <9.0
     - pytest-mock >=3.10
 
 about:
