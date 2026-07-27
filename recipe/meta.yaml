@@ -1,10 +1,6 @@
 {% set name = "scikit-rf" %}
 {% set version = "2.0.1" %}
-{% set deselect_tests = " --deselect=skrf/tests/test_network.py::NetworkTestCase" %}
 
-# >   with pytest.raises(RuntimeWarning):
-# E   Failed: DID NOT RAISE <class 'RuntimeWarning'>
-# The test uses pytest.raises(RuntimeWarning) but warnings aren't exceptions—they need pytest.warns() instead.
 package:
   name: {{ name }}
   version: {{ version }}
@@ -30,7 +26,6 @@ requirements:
     - scipy >=1.7
     - pandas >=1.1
     - typing-extensions
-    - typing_extensions
   run_constrained:
     # testspice
     - pyspice >=1.5
@@ -41,9 +36,18 @@ requirements:
     # netw
     - networkx >=2.0
     # visa
-    - PyVISA >=1.12
+    - pyvisa >=1.12
     - pyvisa-py >=0.6
 
+# These tests expect RuntimeWarning to be raised for zero-division cases,
+# but the current Numpy behavior emits warnings without raising exceptions.
+{% set deselect_tests = "--deselect=skrf/tests/test_network.py::NetworkTestCase::test_gain_circle" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain" %}
+# Windows does not allow reopening a NamedTemporaryFile for writing
+# while it is still open, which causes PermissionError in this test.
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif" %} # [win]
 test:
   source_files:
     - skrf/tests
@@ -60,7 +64,7 @@ test:
     - pytest -v skrf {{ deselect_tests }}
   requires:
     - pip
-    - pytest >=7.0
+    - pytest <9.0
     - pytest-mock >=3.10
 
 about:
