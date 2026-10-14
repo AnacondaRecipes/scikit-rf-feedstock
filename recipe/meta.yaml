@@ -1,13 +1,22 @@
 {% set name = "scikit-rf" %}
-{% set version = "2.0.1" %}
+{% set version = "2.1.0" %}
+{% set deselect_tests = "--deselect=skrf/tests/test_network.py::NetworkTestCase::test_gain_circle" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_gain"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif"' %}  # [win]
 
+# These tests expect RuntimeWarning to be raised for zero-division cases,
+# but the current Numpy behavior emits warnings without raising exceptions.
+# Windows does not allow reopening a NamedTemporaryFile for writing
+# while it is still open, which causes PermissionError in this test.
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 36d5dca78a0f6d01074583536dd225b0c7eee5badc68db7e3168ddcae6d441a7
+  sha256: e514a08074e7db887f97bcfd66c8c4dc44b00015cfdbb971a25215f68b3f7b8e
 
 build:
   number: 0
@@ -26,6 +35,7 @@ requirements:
     - scipy >=1.7
     - pandas >=1.1
     - typing-extensions
+    - typing_extensions
   run_constrained:
     # testspice
     - pyspice >=1.5
@@ -36,18 +46,9 @@ requirements:
     # netw
     - networkx >=2.0
     # visa
-    - pyvisa >=1.12
+    - PyVISA >=1.12
     - pyvisa-py >=0.6
 
-# These tests expect RuntimeWarning to be raised for zero-division cases,
-# but the current Numpy behavior emits warnings without raising exceptions.
-{% set deselect_tests = "--deselect=skrf/tests/test_network.py::NetworkTestCase::test_gain_circle" %}
-{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_gain" %}
-{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain" %}
-{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain" %}
-# Windows does not allow reopening a NamedTemporaryFile for writing
-# while it is still open, which causes PermissionError in this test.
-{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif" %} # [win]
 test:
   source_files:
     - skrf/tests
