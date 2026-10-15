@@ -1,5 +1,5 @@
 {% set name = "scikit-rf" %}
-{% set version = "2.0.1" %}
+{% set version = "2.1.0" %}
 
 package:
   name: {{ name }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 36d5dca78a0f6d01074583536dd225b0c7eee5badc68db7e3168ddcae6d441a7
+  sha256: e514a08074e7db887f97bcfd66c8c4dc44b00015cfdbb971a25215f68b3f7b8e
 
 build:
   number: 0
@@ -27,8 +27,6 @@ requirements:
     - pandas >=1.1
     - typing-extensions
   run_constrained:
-    # testspice
-    - pyspice >=1.5
     # plot
     - matplotlib-base >=3.5
     # xlsx
@@ -48,6 +46,7 @@ requirements:
 # Windows does not allow reopening a NamedTemporaryFile for writing
 # while it is still open, which causes PermissionError in this test.
 {% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif" %} # [win]
+
 test:
   source_files:
     - skrf/tests
@@ -73,12 +72,12 @@ about:
   license_file: LICENSE.txt
   license_family: BSD
   summary: Object Oriented Microwave Engineering.
-  doc_url: https://scikit-rf.readthedocs.io
   description: |
     scikit-rf is an Open Source, BSD-licensed package for RF/Microwave
     engineering implemented in the Python programming language. It provides
     a modern, object-oriented library which is both flexible and scalable.
   dev_url: https://github.com/scikit-rf/scikit-rf
+  doc_url: https://scikit-rf.readthedocs.io
 
 extra:
   recipe-maintainers:
