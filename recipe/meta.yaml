@@ -1,10 +1,10 @@
 {% set name = "scikit-rf" %}
 {% set version = "2.2.0" %}
 {% set deselect_tests = "--deselect=skrf/tests/test_network.py::NetworkTestCase::test_gain_circle" %}
-{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_gain"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain"' %}
-{% set deselect_tests = 'deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif"' %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain" %}
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif" %}  # [win]
 
 # These tests expect RuntimeWarning to be raised for zero-division cases,
 # but the current Numpy behavior emits warnings without raising exceptions.
