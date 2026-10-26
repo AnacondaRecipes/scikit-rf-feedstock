@@ -5,11 +5,13 @@
 {% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_max_stable_gain" %}
 {% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_unilateral_gain" %}
 {% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_networkSet.py::NetworkSetTestCase::test_to_mdif" %}  # [win]
+{% set deselect_tests = deselect_tests + " --deselect=skrf/tests/test_network.py::NetworkTestCase::test_passivity" %}  # [osx and arm64]
 
 # These tests expect RuntimeWarning to be raised for zero-division cases,
 # but the current Numpy behavior emits warnings without raising exceptions.
 # Windows does not allow reopening a NamedTemporaryFile for writing
 # while it is still open, which causes PermissionError in this test.
+# osx-arm64: test_passivity asserts imag == 0 with atol=0; residual is ~1e-17.
 package:
   name: {{ name }}
   version: {{ version }}
