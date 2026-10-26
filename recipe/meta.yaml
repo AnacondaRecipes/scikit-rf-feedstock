@@ -35,7 +35,7 @@ requirements:
     # netw
     - networkx >=2.0
     # visa
-    - PyVISA >=1.12
+    - pyvisa >=1.12
     - pyvisa-py >=0.6
 
 # These tests expect RuntimeWarning to be raised for zero-division cases,
